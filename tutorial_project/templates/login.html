@@ -4,14 +4,18 @@
 {% block title %}Login{% endblock %}
 
 {% block body_block %}
-	<h1>Login To Tutorial App</h1>
-	<form id="login_form" method='post' action='/login/'>
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+
+	<h2 class="form-signin-heading">Login To Tutorial App</h2>
+
+	<form class="form-signin" id="login_form" method='post' action='/login/'>
+		<h2 class="form-signin-heading">Please Login</h2>
 		{% csrf_token %}
-		Username: <input type='text' name='username' value="" size="50">
 
-		Password: <input type='password' name='password' value="" size="50">
+		<input class="form-control" placeholder="Username" type='text' name='username' value="" size="50" required autofocus>
 
-		<input type='submit' value="Login">
-
+		<input class="form-control" placeholder="Password" type='password' name='password' value="" size="50" required>
+		<br>
+		<button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Sign In</button>
 	</form>
 {% endblock %}
