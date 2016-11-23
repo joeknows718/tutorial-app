@@ -1,11 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User 
 from models import Category, Page, UserProfile
 from forms import CategoryForm, PageForm, UserForm, UserProfileForm 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from datetime import datetime 
+from datetime import datetime
+from search import run_query
+
+
+
 
 
 # Create your views here.
@@ -76,6 +80,16 @@ def about(request):
 
 def category(request, category_name_slug):
 	context_dict = {}
+	context_dict['result_list'] = None
+	context_dict['query'] = None
+
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
+
+		if query:
+			result_list = run_query(query)
+			context_dict['result_list'] = result_list
+			context_dict['query'] = query
 	try:
 		category = Category.objects.get(slug=category_name_slug)
 		pages = Page.objects.filter(category=category)
@@ -190,4 +204,37 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/')
+
+def track_url(request):
+	page_id = None
+
+	url = '/'
+
+	if request.method == 'GET':
+		if 'page_id' in request.GET:
+			page_id = request.GET['page_id']
+			try:
+				page = Page.objects.get(id=page_id)
+				page.views = page.views + 1 
+				page.save()
+				url = page.url
+			except: 
+				pass
+	return redirect(url)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
