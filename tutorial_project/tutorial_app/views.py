@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User 
 from models import Category, Page, UserProfile
-from forms import CategoryForm, PageForm, UserForm, UserProfileForm 
+from forms import CategoryForm, PageForm, UserForm, UserProfileForm, ContactForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -71,7 +71,6 @@ def about(request):
 
 	count = count + 1
 	context_dict['visits'] = count 
-
 
 	return render(request, 'about.html', context_dict)
 
@@ -277,8 +276,37 @@ def edit_profile(request, user_username):
 
 
 
+def contact(request):
+	if request.method == 'POST':
+		form = ContactForm(request.POST)
+
+		if form.is_valid():
+			form.send_message()
+			return HttpResponseRedirect('/')
+		else:
+			print form.errors
+	else:
+		form = ContactForm()
+
+	return render(request, 'contact.html', {'form':form})
 
 
+
+@login_required
+def like_category(request):
+	cat_id = None
+	if request.method == "GET":
+		cat_id = request.GET['category_id']
+
+	likes = 0
+
+	if cat_id:
+		cat = Category.objects.get(id=int(cat_id))
+		if cat:
+			likes = cat.likes + 1
+			cat.likes = likes 
+			cat.save()
+	return HttpResponse(likes)
 
 
 

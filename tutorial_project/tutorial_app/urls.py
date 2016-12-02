@@ -13,5 +13,7 @@ urlpatterns = patterns('',
 	url(r'^goto/$', views.track_url, name='goto'),
 	url(r'^user/(?P<user_username>[\w\-]+)/$', views.user_profile, name='profile'),
 	url(r'^user/(?P<user_username>[\w\-]+)/edit/$', views.edit_profile, name='edit_profile'),
+	url(r'^contact/', views.contact, name='contact'),
+	url(r'^like_category/$', views.like_category, name='like_category'),
 	)
 
