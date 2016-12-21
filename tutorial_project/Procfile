@@ -1,2 +1,2 @@
-web: gunicorn --pythonpath tutorial_project.wsgi --log-file -
+web: gunicorn tutorial_project.wsgi --log-file -
 
