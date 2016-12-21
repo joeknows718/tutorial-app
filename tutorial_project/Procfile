@@ -1,3 +1,2 @@
 web: gunicorn tutorial_project.wsgi --log-file -
-worker: python worker.py
 
